@@ -1,4 +1,4 @@
-import conf from "../conf/conf";
+import conf from "../conf/conf.js";
 import { Client, ID, Databases, Storage, Query } from "appwrite";
 
 export class Service {
@@ -26,10 +26,10 @@ export class Service {
           featuredImage,
           status,
           userId,
-        } // what you want to store in the database
+        }
       );
     } catch (error) {
-      throw new Error(error.message);
+      console.log("Appwrite serive :: createPost :: error", error);
     }
   }
 
@@ -44,10 +44,10 @@ export class Service {
           content,
           featuredImage,
           status,
-        } // what you want to update
+        }
       );
     } catch (error) {
-      throw new Error(error.message);
+      console.log("Appwrite serive :: updatePost :: error", error);
     }
   }
 
@@ -60,7 +60,7 @@ export class Service {
       );
       return true;
     } catch (error) {
-      throw new Error(error.message);
+      console.log("Appwrite serive :: deletePost :: error", error);
       return false;
     }
   }
@@ -73,7 +73,7 @@ export class Service {
         slug
       );
     } catch (error) {
-      throw new Error(error.message);
+      console.log("Appwrite serive :: getPost :: error", error);
       return false;
     }
   }
@@ -86,10 +86,12 @@ export class Service {
         queries
       );
     } catch (error) {
-      throw new Error(error.message);
+      console.log("Appwrite serive :: getPosts :: error", error);
       return false;
     }
   }
+
+  // file upload service
 
   async uploadFile(file) {
     try {
@@ -99,32 +101,25 @@ export class Service {
         file
       );
     } catch (error) {
-      throw new Error(error.message);
+      console.log("Appwrite serive :: uploadFile :: error", error);
       return false;
     }
   }
 
   async deleteFile(fileId) {
     try {
-      await this.bucket.deleteFile(
-        conf.appwriteBucketId,
-        fileId
-      );
+      await this.bucket.deleteFile(conf.appwriteBucketId, fileId);
       return true;
     } catch (error) {
-      throw new Error(error.message);
+      console.log("Appwrite serive :: deleteFile :: error", error);
       return false;
     }
   }
 
   getFilePreview(fileId) {
-    return this.bucket.getFilePreview(
-        conf.appwriteBucketId,
-        fileId
-    );
+    return this.bucket.getFilePreview(conf.appwriteBucketId, fileId);
   }
 }
 
 const service = new Service();
-
 export default service;

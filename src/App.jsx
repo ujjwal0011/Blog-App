@@ -5,7 +5,6 @@ import authService from "./appwrite/auth";
 import { login, logout } from "./store/authSlice";
 import { Footer, Header } from "./components";
 import { Outlet } from "react-router-dom";
-import DarkGridBackground from './components/container/Container'
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -29,7 +28,7 @@ function App() {
       <div className="w-full block">
         <Header />
         <main>
-          {/* TODO: <Outlet /> */}
+          <Outlet />
         </main>
         <Footer />
       </div>
