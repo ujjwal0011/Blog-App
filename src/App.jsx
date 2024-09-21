@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import "./App.css";
+import { useDispatch, useSelector } from "react-redux";
 import authService from "./appwrite/auth";
 import { login, logout } from "./store/authSlice";
 import { Footer, Header } from "./components";
 import { Outlet } from "react-router-dom";
+import LoaderSkeleton from "./components/LoaderSkeleton";
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -15,25 +15,44 @@ function App() {
       .getCurrentUser()
       .then((userData) => {
         if (userData) {
-          dispatch(login({ userData }));
+          dispatch(login(userData));
         } else {
-          dispatch(logout());
+          dispatch(logout()); 
         }
       })
-      .finally(() => setLoading(false));
-  }, []);
+      .finally(() => setLoading(false)); 
+  }, [dispatch]);
 
-  return !loading ? (
-    <div className="min-h-screen flex flex-wrap content-between bg-gray-400">
-      <div className="w-full block">
+  const userData = useSelector((state) => state.auth.userData);
+
+  if (loading) {
+    return (
+      <div className="relative min-h-screen flex flex-col bg-black overflow-hidden">
+        <LoaderSkeleton />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative min-h-screen flex flex-col bg-black overflow-hidden">
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(75, 75, 75, 0.3) 1px, transparent 1px), 
+                            linear-gradient(to bottom, rgba(75, 75, 75, 0.3) 1px, transparent 1px)`,
+          backgroundSize: "40px 40px",
+        }}
+      ></div>
+
+      <div className="relative z-10 w-full">
         <Header />
-        <main>
+        <main className="flex-grow">
           <Outlet />
         </main>
         <Footer />
       </div>
     </div>
-  ) : null;
+  );
 }
 
 export default App;

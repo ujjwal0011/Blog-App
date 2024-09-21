@@ -55,6 +55,16 @@ export class AuthService {
       console.log("Appwrite serive :: logout :: error", error);
     }
   }
+
+  async getUserById(userId) {
+    try {
+      const user = await this.account.get(userId);
+      return user;
+    } catch (error) {
+      console.error("Appwrite service :: getUserById :: error", error);
+      return null;
+    }
+  }
 }
 
 const authService = new AuthService();

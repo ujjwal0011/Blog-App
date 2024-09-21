@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, LogoutButton } from "../index";
-import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function Header() {
   const authStatus = useSelector((state) => state.auth.status);
+  const userData = useSelector((state) => state.auth.userData);
+  const [displayName, setDisplayName] = useState("User");
   const navigate = useNavigate();
+
+  // Update the display name when userData or authStatus changes
+  useEffect(() => {
+    if (authStatus && userData && userData.name) {
+      setDisplayName(userData.name);  // Set to the current user's name
+    } else {
+      setDisplayName("User");  // Reset to default when logged out or no user data
+    }
+  }, [userData, authStatus]);  // Re-run the effect when userData or authStatus changes
 
   const navItems = [
     {
@@ -37,30 +47,44 @@ function Header() {
   ];
 
   return (
-    <header className="py-3 shadow bg-gray-500">
-      <Container>
-        <nav className="flex">
-          <ul className="flex ml-auto">
-            {navItems.map((item) =>
-              item.active ? (
-                <li key={item.name}>
-                  <button
-                    onClick={() => navigate(item.slug)}
-                    className="inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full"
-                  >
-                    {item.name}
-                  </button>
-                </li>
-              ) : null
-            )}
-            {authStatus && (
-              <li>
-                <LogoutButton />
-              </li>
-            )}
-          </ul>
-        </nav>
-      </Container>
+    <header className="relative bg-black text-gray-300 py-4 shadow-lg border-b border-gray-900 overflow-hidden">
+      <div className="relative z-10">
+        <Container>
+          <nav className="flex items-center justify-between space-x-6">
+            <div className="flex-1 flex justify-center">
+              <h1 className="text-2xl font-bold text-white">Blog</h1>
+            </div>
+            <div className="flex-1 flex justify-center">
+              <ul className="flex space-x-8">
+                {navItems.map((item) =>
+                  item.active ? (
+                    <li key={item.name}>
+                      <button
+                        onClick={() => navigate(item.slug)}
+                        className="px-6 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-gray-900 transition-colors duration-200"
+                      >
+                        {item.name}
+                      </button>
+                    </li>
+                  ) : null
+                )}
+              </ul>
+            </div>
+            <div className="flex-1 flex justify-center items-center">
+              {authStatus && (
+                <>
+                  <span className="text-gray-300 px-4">
+                    Welcome, {displayName}
+                  </span>
+                  <li>
+                    <LogoutButton />
+                  </li>
+                </>
+              )}
+            </div>
+          </nav>
+        </Container>
+      </div>
     </header>
   );
 }

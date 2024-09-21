@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -13,7 +13,7 @@ export default function Footer() {
         }}
       ></div>
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-white">DevUI</h2>
             <p className="text-sm">

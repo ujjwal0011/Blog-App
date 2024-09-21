@@ -14,7 +14,15 @@ export class Service {
     this.bucket = new Storage(this.client);
   }
 
-  async createPost({ title, slug, content, featuredImage, status, userId }) {
+  async createPost({
+    title,
+    slug,
+    content,
+    featuredImage,
+    status,
+    userId,
+    userName,
+  }) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseId,
@@ -26,10 +34,12 @@ export class Service {
           featuredImage,
           status,
           userId,
+          userName,
+          createdAt: new Date().toISOString(),
         }
       );
     } catch (error) {
-      console.log("Appwrite serive :: createPost :: error", error);
+      console.log("Appwrite service :: createPost :: error", error);
     }
   }
 
@@ -90,8 +100,6 @@ export class Service {
       return false;
     }
   }
-
-  // file upload service
 
   async uploadFile(file) {
     try {

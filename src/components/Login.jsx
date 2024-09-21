@@ -9,18 +9,19 @@ import { useForm } from "react-hook-form";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const [error, setError] = useState("");
 
   const login = async (data) => {
-    console.log(data);
     setError("");
     try {
       const session = await authService.login(data);
       if (session) {
         const userData = await authService.getCurrentUser();
         if (userData) {
+          // Dispatch the login action to update the Redux store
           dispatch(authLogin(userData));
+          // Navigate to the homepage after successful login
           navigate("/");
         }
       }
@@ -28,52 +29,66 @@ function Login() {
       setError(error.message);
     }
   };
+
   return (
-    <div className="flex items-center justify-center w-full">
+    <div className="relative flex items-center justify-center w-full min-h-screen bg-black">
       <div
-        className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}
-      >
-        <h2 className="text-center text-2xl font-bold leading-tight">
-          Sign in to your account
-        </h2>
-        <p className="mt-2 text-center text-base text-black/60">
-          Don&apos;t have any account?&nbsp;
-          <Link
-            to="/signup"
-            className="font-medium text-primary transition-all duration-200 hover:underline"
-          >
-            Sign Up
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(75, 75, 75, 0.3) 1px, transparent 1px), 
+                            linear-gradient(to bottom, rgba(75, 75, 75, 0.3) 1px, transparent 1px)`,
+          backgroundSize: "40px 40px",
+        }}
+      ></div>
+      <div className="relative z-10 mx-auto w-full max-w-md bg-black rounded-lg p-8 border border-gray-700 shadow-lg">
+        <h2 className="text-center text-2xl font-semibold text-white">Login</h2>
+        <p className="mt-2 text-center text-sm text-gray-400">
+          Enter your email below to login to your account
+        </p>
+        {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+        
+        <form onSubmit={handleSubmit(login)} className="mt-6 space-y-6">
+          {/* Email Field */}
+          <Input
+            label="Email"
+            type="email"
+            placeholder="m@example.com"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                message: "Email address must be valid"
+              }
+            })}
+          />
+          {/* Display validation error for email */}
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email.message}</p>
+          )}
+          
+          {/* Password Field */}
+          <Input
+            label="Password"
+            type="password"
+            placeholder="Enter your password"
+            {...register("password", { required: "Password is required" })}
+          />
+          {/* Display validation error for password */}
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
+          
+          <Button type="submit" className="w-full">
+            Login
+          </Button>
+        </form>
+
+        <p className="mt-4 text-center text-sm text-gray-400">
+          Don’t have an account?&nbsp;
+          <Link to="/signup" className="font-medium text-white hover:underline">
+            Sign up
           </Link>
         </p>
-        {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
-        <form onSubmit={handleSubmit(login)} className="mt-8">
-          <div className="space-y-5">
-            <Input
-              label="Email"
-              type="email"
-              placeholder="Enter your email address"
-              {...register("email", {
-                required: true,
-                validate: {
-                  matchPatern: (value) =>
-                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                    "Email address must be a valid address",
-                },
-              })}
-            />
-            <Input
-              label="Password: "
-              type="password"
-              placeholder="Enter your password"
-              {...register("password", {
-                required: true,
-              })}
-            />
-            <Button type="submit" className="w-full">
-              Sign in
-            </Button>
-          </div>
-        </form>
       </div>
     </div>
   );

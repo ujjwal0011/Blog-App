@@ -1,35 +1,55 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import service from "../appwrite/config";
 import { Container, PostCard } from "../components/index";
+import PostSkeleton from "../components/PostSkeleton";
+import { setPosts } from "../store/postSlice";
+import {isLoggedIn}  from "../store/authSlice";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function Home() {
-  const [posts, setPosts] = useState([]);
+
+  const loggedIn = useSelector(isLoggedIn);
+  const navigate = useNavigate()
+
+  if(!loggedIn) {
+    navigate("/notloggedin")
+  }
+
+
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.posts.posts);
+  const loading = !posts.length;
 
   useEffect(() => {
     service.getPosts().then((posts) => {
       if (posts) {
-        setPosts(posts.documents);
+        dispatch(setPosts(posts.documents));
       }
     });
-  }, []);
+  }, [dispatch]);
 
-  if (posts.length === 0) {
+  if (loading) {
     return (
-      <div className="w-full py-8 mt-4 text-center">
+      <div className="relative w-full py-8 min-h-screen bg-black overflow-hidden">
+        {/* Loading State with Skeleton */}
         <Container>
-          <div className="flex flex-wrap">
-            <div className="p-2 w-full">
-              <h1 className="text-2xl font-bold hover:text-gray-500">
-                Login to read posts
-              </h1>
-            </div>
+          <div className="relative z-10 flex flex-wrap justify-center">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="p-2 w-1/4">
+                <PostSkeleton />
+              </div>
+            ))}
           </div>
         </Container>
       </div>
     );
   }
+
   return (
-    <div className="w-full py-8">
+    <div className="relative w-full py-8 bg-black overflow-hidden">
+      {/* Grid and Container */}
       <Container>
         <div className="flex flex-wrap">
           {posts.map((post) => (

@@ -15,6 +15,7 @@ import EditPost from "./pages/EditPost.jsx";
 import Post from "./pages/Post.jsx";
 
 import AllPosts from "./pages/AllPosts.jsx";
+import NotLoggedIn from "./pages/NotLoggedIn.jsx";
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
         path: "/post/:slug",
         element: <Post />,
       },
+      {
+        path:"/notloggedin",
+        element: <NotLoggedIn />
+      }
     ],
   },
 ]);
