@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Select, Input, RTE } from "../index"; // Assume these are your UI components
+import { Button, Select, Input } from "../index"; // Assume these are your UI components
 import service from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import TrixEditor from "../TrixEditor"; // Import TrixEditor
 
 function PostForm({ post }) {
   const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
@@ -17,7 +18,7 @@ function PostForm({ post }) {
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   const submit = async (data) => {
     if (!userData) {
@@ -26,12 +27,12 @@ function PostForm({ post }) {
     }
 
     const { name, $id } = userData;
-    setIsLoading(true); // Set loading to true when submitting
+    setIsLoading(true);
 
     try {
-      if (post) {
-        const file = data.image[0] ? await service.uploadFile(data.image[0]) : null;
+      const file = data.image[0] ? await service.uploadFile(data.image[0]) : null;
 
+      if (post) {
         if (file) {
           await service.deleteFile(post.featuredImage);
         }
@@ -45,8 +46,6 @@ function PostForm({ post }) {
           navigate(`/post/${dbPost.$id}`);
         }
       } else {
-        const file = await service.uploadFile(data.image[0]);
-
         if (file) {
           const fileId = file.$id;
           data.featuredImage = fileId;
@@ -64,7 +63,7 @@ function PostForm({ post }) {
     } catch (error) {
       console.error("Error while creating or updating the post: ", error);
     } finally {
-      setIsLoading(false); // Set loading to false after completion
+      setIsLoading(false);
     }
   };
 
@@ -89,7 +88,6 @@ function PostForm({ post }) {
     return () => subscription.unsubscribe();
   }, [watch, slugTransform, setValue]);
 
-  // Skeleton loader UI
   const renderSkeleton = () => (
     <div className="animate-pulse space-y-6">
       <div className="h-8 bg-gray-800 rounded-lg"></div>
@@ -112,7 +110,7 @@ function PostForm({ post }) {
       ></div>
 
       <div className="relative z-10 p-8 max-w-5xl mx-auto">
-        {isLoading ? ( // Show skeleton while loading
+        {isLoading ? (
           renderSkeleton()
         ) : (
           <form onSubmit={handleSubmit(submit)} className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -134,11 +132,9 @@ function PostForm({ post }) {
                   });
                 }}
               />
-              <RTE
-                label="Content :"
-                name="content"
-                control={control}
-                defaultValue={getValues("content")}
+              <TrixEditor
+                value={getValues("content")}
+                onChange={(value) => setValue("content", value)} // Set content value on change
               />
             </div>
             <div className="space-y-6">
