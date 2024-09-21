@@ -22,18 +22,18 @@ function PostCard({ $id, title, featuredImage, userName, createdAt }) {
             <img
               src={service.getFilePreview(featuredImage)}
               alt={title}
-              className="rounded-xl object-cover w-full h-48"
+              className="rounded-xl object-cover w-full h-48 sm:h-56 md:h-64 lg:h-72"
             />
           ) : (
-            <div className="h-48 bg-gray-700 flex items-center justify-center rounded-xl">
+            <div className="h-48 sm:h-56 md:h-64 lg:h-72 bg-gray-700 flex items-center justify-center rounded-xl">
               <p className="text-gray-400">No Image</p>
             </div>
           )}
         </div>
-        <h2 className="text-xl font-bold text-white">{title}</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-white">{title}</h2>
         <div className="mt-2 text-gray-400">
-          <p>By: {userName || "Unknown User"}</p>
-          <p>Date: {postDate()}</p>
+          <p className="text-sm md:text-base">By: {userName || "Unknown User"}</p>
+          <p className="text-sm md:text-base">Date: {postDate()}</p>
         </div>
       </div>
     </Link>
