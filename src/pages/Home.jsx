@@ -50,6 +50,14 @@ function Home() {
   return (
     <div className="relative w-full py-8 bg-black overflow-hidden">
       {/* Grid and Container */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(75, 75, 75, 0.3) 1px, transparent 1px), 
+                            linear-gradient(to bottom, rgba(75, 75, 75, 0.3) 1px, transparent 1px)`,
+          backgroundSize: "40px 40px",
+        }}
+      ></div>
       <Container>
         <div className="flex flex-wrap">
           {posts.map((post) => (
