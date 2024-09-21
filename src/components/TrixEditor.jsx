@@ -21,7 +21,6 @@ const TrixEditor = ({ value, onChange }) => {
             <trix-editor 
                 input="x" 
                 className="w-full border-none bg-white" 
-                style={{ height: '350px' }} 
             />
         </div>
     );
