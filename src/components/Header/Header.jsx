@@ -8,16 +8,15 @@ function Header() {
   const userData = useSelector((state) => state.auth.userData);
   const [displayName, setDisplayName] = useState("User");
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State to toggle mobile menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Update the display name when userData or authStatus changes
   useEffect(() => {
     if (authStatus && userData && userData.name) {
-      setDisplayName(userData.name); // Set to the current user's name
+      setDisplayName(userData.name);
     } else {
-      setDisplayName("User"); // Reset to default when logged out or no user data
+      setDisplayName("User");
     }
-  }, [userData, authStatus]); // Re-run the effect when userData or authStatus changes
+  }, [userData, authStatus]);
 
   const navItems = [
     {
@@ -52,12 +51,10 @@ function Header() {
       <div className="relative z-10">
         <Container>
           <nav className="flex items-center justify-between">
-            {/* Logo */}
             <div className="flex-1 flex justify-start">
               <h1 className="text-2xl font-bold text-white">Bliss Note</h1>
             </div>
 
-            {/* Mobile Menu Button */}
             <div className="lg:hidden flex-1 flex justify-end">
               <button
                 className="text-gray-300 hover:text-white focus:outline-none"
@@ -74,13 +71,16 @@ function Header() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"}
+                    d={
+                      isMenuOpen
+                        ? "M6 18L18 6M6 6l12 12"
+                        : "M4 6h16M4 12h16m-7 6h7"
+                    }
                   />
                 </svg>
               </button>
             </div>
 
-            {/* Navigation Links */}
             <div
               className={`lg:flex flex-1 justify-center items-center lg:space-x-8 transition-all duration-300 ${
                 isMenuOpen ? "block" : "hidden lg:block"
@@ -106,11 +106,12 @@ function Header() {
               </ul>
             </div>
 
-            {/* User Info & Logout Button */}
             <div className="hidden lg:flex flex-1 justify-end items-center">
               {authStatus && (
                 <>
-                  <span className="text-gray-300 px-4">Welcome, {displayName}</span>
+                  <span className="text-gray-300 px-4">
+                    Welcome, {displayName}
+                  </span>
                   <li>
                     <LogoutButton />
                   </li>
@@ -118,10 +119,11 @@ function Header() {
               )}
             </div>
 
-            {/* User Info & Logout Button for Mobile */}
             {authStatus && (
               <div className="lg:hidden flex justify-end items-center mt-4">
-                <span className="text-gray-300 px-4">Welcome, {displayName}</span>
+                <span className="text-gray-300 px-4">
+                  Welcome, {displayName}
+                </span>
                 <li>
                   <LogoutButton />
                 </li>

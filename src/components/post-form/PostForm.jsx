@@ -1,20 +1,21 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Select, Input } from "../index"; // Assume these are your UI components
+import { Button, Select, Input } from "../index";
 import service from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import TrixEditor from "../TrixEditor"; // Import TrixEditor
+import TrixEditor from "../TrixEditor";
 
 function PostForm({ post }) {
-  const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
-    defaultValues: {
-      title: post?.title || "",
-      slug: post?.$id || "",
-      content: post?.content || "",
-      status: post?.status || "active",
-    },
-  });
+  const { register, handleSubmit, watch, setValue, control, getValues } =
+    useForm({
+      defaultValues: {
+        title: post?.title || "",
+        slug: post?.$id || "",
+        content: post?.content || "",
+        status: post?.status || "active",
+      },
+    });
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
@@ -30,7 +31,9 @@ function PostForm({ post }) {
     setIsLoading(true);
 
     try {
-      const file = data.image[0] ? await service.uploadFile(data.image[0]) : null;
+      const file = data.image[0]
+        ? await service.uploadFile(data.image[0])
+        : null;
 
       if (post) {
         if (file) {
@@ -113,7 +116,10 @@ function PostForm({ post }) {
         {isLoading ? (
           renderSkeleton()
         ) : (
-          <form onSubmit={handleSubmit(submit)} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <form
+            onSubmit={handleSubmit(submit)}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
             <div className="md:col-span-2 space-y-6">
               <Input
                 label="Title :"
@@ -134,7 +140,7 @@ function PostForm({ post }) {
               />
               <TrixEditor
                 value={getValues("content")}
-                onChange={(value) => setValue("content", value)} // Set content value on change
+                onChange={(value) => setValue("content", value)} 
               />
             </div>
             <div className="space-y-6">

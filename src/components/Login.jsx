@@ -9,7 +9,11 @@ import { useForm } from "react-hook-form";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [error, setError] = useState("");
 
   const login = async (data) => {
@@ -19,9 +23,7 @@ function Login() {
       if (session) {
         const userData = await authService.getCurrentUser();
         if (userData) {
-          // Dispatch the login action to update the Redux store
           dispatch(authLogin(userData));
-          // Navigate to the homepage after successful login
           navigate("/");
         }
       }
@@ -46,9 +48,8 @@ function Login() {
           Enter your email below to login to your account
         </p>
         {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
-        
+
         <form onSubmit={handleSubmit(login)} className="mt-6 space-y-6">
-          {/* Email Field */}
           <Input
             label="Email"
             type="email"
@@ -57,27 +58,23 @@ function Login() {
               required: "Email is required",
               pattern: {
                 value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-                message: "Email address must be valid"
-              }
+                message: "Email address must be valid",
+              },
             })}
           />
-          {/* Display validation error for email */}
           {errors.email && (
             <p className="text-red-500 text-sm">{errors.email.message}</p>
           )}
-          
-          {/* Password Field */}
           <Input
             label="Password"
             type="password"
             placeholder="Enter your password"
             {...register("password", { required: "Password is required" })}
           />
-          {/* Display validation error for password */}
           {errors.password && (
             <p className="text-red-500 text-sm">{errors.password.message}</p>
           )}
-          
+
           <Button type="submit" className="w-full">
             Login
           </Button>

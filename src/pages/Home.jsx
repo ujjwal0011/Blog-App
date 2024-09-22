@@ -1,22 +1,19 @@
-
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import service from "../appwrite/config";
 import { Container, PostCard } from "../components/index";
 import PostSkeleton from "../components/PostSkeleton";
 import { setPosts } from "../store/postSlice";
-import {isLoggedIn}  from "../store/authSlice";
-import { Navigate, useNavigate } from "react-router-dom";
+import { isLoggedIn } from "../store/authSlice";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
-
   const loggedIn = useSelector(isLoggedIn);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  if(!loggedIn) {
-    navigate("/notloggedin")
+  if (!loggedIn) {
+    navigate("/notLoggedIn");
   }
-
 
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.posts);
@@ -33,7 +30,6 @@ function Home() {
   if (loading) {
     return (
       <div className="relative w-full py-8 min-h-screen bg-black overflow-hidden">
-        {/* Loading State with Skeleton */}
         <Container>
           <div className="relative z-10 flex flex-wrap justify-center">
             {Array.from({ length: 4 }).map((_, index) => (
@@ -49,7 +45,6 @@ function Home() {
 
   return (
     <div className="relative w-full py-8 bg-black overflow-hidden">
-      {/* Grid and Container */}
       <div
         className="absolute inset-0"
         style={{

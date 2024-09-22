@@ -32,7 +32,9 @@ function PostCard({ $id, title, featuredImage, userName, createdAt }) {
         </div>
         <h2 className="text-xl md:text-2xl font-bold text-white">{title}</h2>
         <div className="mt-2 text-gray-400">
-          <p className="text-sm md:text-base">By: {userName || "Unknown User"}</p>
+          <p className="text-sm md:text-base">
+            By: {userName || "Unknown User"}
+          </p>
           <p className="text-sm md:text-base">Date: {postDate()}</p>
         </div>
       </div>

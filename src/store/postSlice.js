@@ -1,8 +1,8 @@
 // store/postsSlice.js
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 export const postSlice = createSlice({
-  name: 'posts',
+  name: "posts",
   initialState: {
     posts: [],
   },
